@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Task index{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Task index</h1>
+
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Created_at</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>{{ task.id }}</td>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.description }}</td>
+                    <td>
+                        <span class="badge {% if task.status %}bg-success{% else %}bg-danger{% endif %}">
+                            {{ task.status ? 'Yes' : 'No' }}
+                        </span>
+                    </td>
+                    <td>{{ task.createdAt ? task.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>
+                        <a href="{{ path('app_task_edit', {'id': task.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                       <form action="{{ path('app_task_delete', {'id': task.id}) }}" method="delete" class="d-inline"
+                                                     onsubmit="return confirm('Are you sure you want to delete this task?');">
+                                                   <input type="hidden" name="_method" value="DELETE">
+                                                   <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
+                                                   <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+                                               </form>
+                     <form action="{{ path('app_task_complete', {'id': task.id}) }}" method="post" class="d-inline">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('complete' ~ task.id) }}">
+                                                    <button type="submit" class="btn btn-sm btn-success">Marquer comme terminé</button>
+                                                </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">No records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_task_new') }}" class="btn btn-primary">Create new</a>
+    </div>
+{% endblock %}

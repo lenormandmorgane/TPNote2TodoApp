@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Task{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Create New Task</h1>
+
+        <div class="card p-4 shadow-sm">
+            {{ include('task/_form.html.twig') }}
+        </div>
+
+        <div class="mt-3">
+            <a href="{{ path('app_task_index') }}" class="btn btn-secondary">Back to list</a>
+        </div>
+    </div>
+{% endblock %}
